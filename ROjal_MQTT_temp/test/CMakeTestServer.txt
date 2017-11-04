@@ -1,0 +1,15 @@
+if(DEFINED ENV{MQTT_SERVER})
+    message("MQTT SERVER is set to: $ENV{MQTT_SERVER}")
+    add_definitions(-DMQTT_SERVER="$ENV{MQTT_SERVER}")
+else()
+    message(FATAL_ERROR "MQTT Broker environment variable not set MQTT_SERVER (use: export MQTT_SERVER=123.456.789.001)")
+endif()
+
+if(DEFINED ENV{MQTT_PORT})
+    message("MQTT PORT is set to: $ENV{MQTT_PORT}")
+    add_definitions(-DMQTT_PORT=$ENV{MQTT_PORT})
+else()
+    add_definitions(-DMQTT_PORT=1883)
+    message(WARNING "MQTT PORT is set to 1883 (use: export MQTT_PORT=1883 to reconfigure)")
+endif()
+

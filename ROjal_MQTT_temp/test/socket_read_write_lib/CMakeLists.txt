@@ -1,0 +1,3 @@
+
+add_library(ROjal_MQTT_SOCKET_IF STATIC socket_read_write.c)
+TARGET_LINK_LIBRARIES(ROjal_MQTT_SOCKET_IF pthread)

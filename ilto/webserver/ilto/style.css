@@ -1,0 +1,474 @@
+body {font-family: "Lato", sans-serif;
+      min-width: 650px;
+      background-color: black;
+      color: white;}
+
+ul.tab {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Float the list items side by side */
+ul.tab li {float: left;}
+
+/* Style the links inside the list items */
+ul.tab li a {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of links on hover */
+ul.tab li a:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+ul.tab li a:focus, .active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+.ilto_raikas_t { 
+   position: absolute; 
+   top: 190px; 
+   left: 270px; 
+   width: 100%; 
+}
+
+.ilto_raikas_h { 
+   position: absolute; 
+   top: 210px; 
+   left: 270px; 
+   width: 100%; 
+}
+
+.ilto_tulo_t { 
+   position: absolute; 
+   top: 420px; 
+   left: 30px; 
+   width: 100%; 
+}
+
+.ilto_tulo_h { 
+   position: absolute; 
+   top: 440px; 
+   left: 30px; 
+   width: 100%; 
+}
+
+.ilto_poisto_t { 
+   position: absolute; 
+   top: 420px; 
+   left: 291px; 
+   width: 100%; 
+}
+
+.ilto_poisto_h { 
+   position: absolute; 
+   top: 440px; 
+   left: 291px; 
+   width: 100%; 
+}
+
+.ilto_jate_t { 
+   position: absolute; 
+   top: 190px; 
+   left: 30px; 
+   width: 100%; 
+}
+
+.ilto_jate_h { 
+   position: absolute; 
+   top: 210px; 
+   left: 30px; 
+   width: 100%; 
+}
+
+.ilto_ulko_t { 
+   position: absolute; 
+   top: 190px; 
+   left: 550px; 
+   width: 100%; 
+}
+
+.ilto_ulko_h { 
+   position: absolute; 
+   top: 210px; 
+   left: 550px; 
+   width: 100%; 
+}
+
+.ilto_ulko { 
+   position: absolute; 
+   top: 160px; 
+   left: 520px; 
+   width: 100%; 
+}
+
+.ilto_kesa_talvi { 
+   position: absolute; 
+   top: 315px; 
+   left: 160px; 
+   width: 100%; 
+}
+
+.ilto_tila {
+   position: absolute;
+   top: 86px;
+   left: 482px;
+   width: 100%;
+   z-index: 10;
+}
+
+.ilto_talteen { 
+   position: absolute; 
+   top: 315px; 
+   left: 146px; 
+   width: 100%;
+   z-index: 10;
+}
+
+.ilto_lammitys { 
+   position: absolute; 
+   top: 352px; 
+   left: 102px; 
+   width: 100%;
+   z-index: 10;
+}
+
+.ILTO_IMG{
+    z-index: -1;
+}
+
+.ilto_line { 
+   position: absolute; 
+   top: 10px; 
+   left: 608px; 
+   width: 100%;
+   z-index: 10;
+}
+
+.ow { 
+   position: absolute; 
+   top: 10px; 
+   left: 400px; 
+   width: 100%;
+   z-index: 10;
+}
+
+.owt { 
+   position: absolute; 
+   top: -4px; 
+   left: 340px; 
+   width: 100%;
+   z-index: 10;
+   color: darkgray;
+}
+
+.owh { 
+   position: absolute; 
+   top: 18px; 
+   left: 340px; 
+   width: 100%;
+   z-index: 10;
+   color: darkgray;
+   font-size: small;
+}
+
+.ows { 
+   position: absolute; 
+   top: 30px; 
+   left: 530px; 
+   width: 100%;
+   z-index: 10;
+   color: darkgray;
+   font-size: small;
+}
+
+.compass { 
+   position: absolute; 
+   top: 2px; 
+   left: 480px; 
+   width: 100%;
+   z-index: 10;
+   color: darkgray;
+   font-size: small;
+}
+
+.wind_dir { 
+   position: absolute; 
+   top: 13px; 
+   left: 490px; 
+   width: 100%;
+   z-index: 10;
+   color: darkgray;
+}
+
+.ilto_speed { 
+   position: absolute; 
+   top: -4px; 
+   left: 570px; 
+   width: 100%;
+   z-index: 10;
+   color: darkgray;
+}
+
+
+.yleis_status { 
+   position: relative;
+   top: 1px; 
+   left: 1px; 
+   width: 99.9%;
+   height: 400px;
+   z-index: 10;
+   background: darkgray;
+}
+
+.asunto { 
+   position: absolute; 
+   top: 3px; 
+   left: 70px; 
+   width: 100%;
+   z-index: 5;
+}
+
+.asunto_img { 
+   position: absolute; 
+}
+
+.compass_big{ 
+   position: absolute; 
+   top: 0px; 
+   left: 10px; 
+   width: 100%;
+   z-index: 5;
+}
+
+.compass_big_img{ 
+   position: absolute; 
+}
+
+.wind_dir_big{ 
+   position: absolute; 
+   top: 23px; 
+   left: 31px; 
+   width: 100%;
+   z-index: 10;
+}
+
+.wind_dir_big_img{
+   position: absolute; 
+}
+
+.yle_ow{ 
+   position: absolute; 
+   top: -11px; 
+   left: 485px; 
+   width: 100%;
+   z-index: 10;
+}
+
+
+.yle_ilto_t_ulko { 
+   position: absolute; 
+   top: 100px; 
+   left: 550px; 
+   width: 100%;
+   z-index: 10;
+   color: black;
+   font-size: large;
+}
+
+.yle_ilto_h_ulko { 
+   position: absolute; 
+   top: 125px; 
+   left: 540px; 
+   width: 100%;
+   z-index: 10;
+   color: darkslategray;
+   font-size: small;
+}
+
+
+.yle_ilto_t_poisto { 
+   position: absolute; 
+   top: 125px; 
+   left: 205px; 
+   width: 100%;
+   z-index: 10;
+   color: black;
+   font-size: large;
+}
+
+.yle_ilto_h_poisto { 
+   position: absolute; 
+   top: 150px; 
+   left: 200px; 
+   width: 100%;
+   z-index: 10;
+   color: darkslategray;
+   font-size: small;
+}
+
+.yle_ilto_t_tulo { 
+   position: absolute; 
+   top: 210px; 
+   left: 445px; 
+   width: 100%;
+   z-index: 10;
+   color: black;
+   font-size: large;
+}
+
+
+.yle_ilto_t_raikas { 
+   position: absolute; 
+   top: 210px; 
+   left: 520px; 
+   width: 100%;
+   z-index: 10;
+   color: black;
+   font-size: large;
+}
+
+
+.yle_ilto_t_jate { 
+   position: absolute; 
+   top: 25px; 
+   left: 315px; 
+   width: 100%;
+   z-index: 10;
+   color: black;
+   font-size: large;
+}
+
+
+.yle_ilto_w_speed { 
+   position: absolute; 
+   top: 130px; 
+   left: 60px; 
+   width: 100%;
+   z-index: 10;
+   color: black;
+   font-size: medium;
+}
+
+.yle_speed_1{ 
+   position: absolute; 
+   top: 324px; 
+   left: 8px; 
+   width: 100%;
+   z-index: 10;
+}
+
+.yle_speed_s1{ 
+   position: absolute; 
+   top: 314px; 
+   left: -3px; 
+   width: 100%;
+   z-index: 9;
+}
+
+.yle_speed_2{ 
+   position: absolute; 
+   top: 228px; 
+   left: -10px; 
+   width: 100%;
+   z-index: 10;
+}
+
+.yle_speed_s2{ 
+   position: absolute; 
+   top: 221px; 
+   left: -3px; 
+   width: 100%;
+   z-index: 9;
+}
+
+.yle_speed_3{ 
+   position: absolute; 
+   top: 144px; 
+   left: 10px; 
+   width: 100%;
+   z-index: 10;
+}
+
+.yle_speed_s3{ 
+   position: absolute; 
+   top: 134px; 
+   left: -3px; 
+   width: 100%;
+   z-index: 9;
+}
+
+.ilto_speed_1{ 
+   position: absolute; 
+   top: 95px; 
+   left: 103px; 
+   width: 100%;
+   z-index: 10;
+}
+
+.ilto_speed_s1{ 
+   position: absolute; 
+   top: 85px; 
+   left: 91px; 
+   width: 100%;
+   z-index: 9;
+}
+
+.ilto_speed_2{ 
+   position: absolute; 
+   top: 92px;
+   left: 170px; 
+   width: 100%;
+   z-index: 10;
+}
+
+.ilto_speed_s2{ 
+   position: absolute; 
+   top: 84px; 
+   left: 178px; 
+   width: 100%;
+   z-index: 9;
+}
+
+.ilto_speed_3{ 
+   position: absolute; 
+   top: 95px; 
+   left: 278px; 
+   width: 100%;
+   z-index: 10;
+}
+
+.ilto_speed_s3{ 
+   position: absolute; 
+   top: 85px; 
+   left: 265px; 
+   width: 100%;
+   z-index: 9;
+}
+
+.yle_ventilate{ 
+   position: absolute; 
+   top: 320px; 
+   left: 475px; 
+   width: 100%;
+   z-index: 11;
+}

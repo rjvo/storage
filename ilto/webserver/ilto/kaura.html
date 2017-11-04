@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>ILTO</title>
+
+    <script type = "text/javascript" src="canvasjs.min.js"></script>
+    <script type = "text/javascript" src="https://code.jquery.com/jquery-git2.min.js"></script>
+    
+    <script type="text/javascript">
+
+        var chartdata = [];
+        var chartdatatemp= [];
+        var mychart = NaN;
+        var xax = 0;
+        var xtemp = 0;
+        var g_jqdata = [];
+        
+        function crete_chart() {
+                    mychart = new CanvasJS.Chart("chartContainer",
+                    {
+                        zoomEnabled: true,
+                        zoomType: "xy",
+                        panEnabled: true,
+                		exportFileName: "ILTO Live",
+                		exportEnabled: true,
+                   		title: {
+				            text: "ILTO"
+            			},
+                        toolTip:{             
+                            content: "{name}: {y} ({x})"
+                        },
+	                  legend: {
+	                      fontSize:14,
+	                      fontFamily: "tamoha",
+	                      fontColor: "Sienna",
+	                      horizontalAlign: "right",
+	                      verticalAlign: "center",
+						            cursor: "pointer",
+						            itemclick: function (e) {
+						                //console.log("legend click: " + e.dataPointIndex);
+						                //console.log(e);
+						                if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+						                    e.dataSeries.visible = false;
+						                } else {
+						                    e.dataSeries.visible = true;
+						                }
+						
+						                e.chart.render();
+						            }
+						        },
+            			axisX:{      
+            				//valueFormatString: "DD-MMM" ,
+            				//interval: 10,
+            				//intervalType: "day",
+                            labelFormatter: function (e) {
+                                return CanvasJS.formatDate( e.value, "YYYY_MMM-DD-HH:mm:ss"); // http://canvasjs.com/docs/charts/chart-options/axisx/valueformatstring/
+                            },
+                            labelAngle: -45,
+                            fontSize: 10,
+                            fontFamily: "tamoha",
+                            fontColor: "Sienna",
+            				labelFontColor: "rgb(0,75,141)",
+            			},
+            			axisY: {
+            				title: "C / RH%",
+            				interlacedColor: "azure",
+            				tickColor: "azure",
+            				titleFontColor: "rgb(0,75,141)",
+            				maximum : 100,
+            				interval: 10,
+                            fontSize: 10,
+                            includeZero: false
+                        },
+                        data: chartdata,  // random generator below
+                    });
+                    mychart.options.axisY.maximum = 100;
+                }
+
+        function fill_chart_data(k, target, v, outdata, xax)
+        {
+            if(k === target)
+            {
+                outdata.push({
+                    x: xax,
+                    y: v,
+                });
+            }
+        }
+
+        function get_chart_data()
+        {
+            while (chartdata.length > 0) 
+            {
+                chartdata.pop();
+            }
+            
+            var today = new Date();
+            var utcm = today.getUTCMilliseconds();
+            var l = (Math.floor((new Date).getTime()/1000) + utcm + 10) * 2;
+            var a = 0; //Math.floor((new Date).getTime()/1000) - 60*24 + utcm;
+
+            $.post( "haedataa.php", { alku: a, loppu: l, limitti: "2000" })
+                .done( function( jqdata ) 
+                    {
+                        var items = [];
+
+                        var dataSeriesTuloC = { type: "line", showInLegend: true, name:"Tulo C" };
+                        var dataPointsTuloC = [];
+                        
+                        var dataSeriesTuloH = { type: "line", showInLegend: true, name:"Tulo RH%" };
+                        var dataPointsTuloH = [];
+
+                        var dataSeriesPoistoC = { type: "line", showInLegend: true, name:"Poisto C" };
+                        var dataPointsPoistoC = [];
+
+                        var dataSeriesPoistoH = { type: "line", showInLegend: true, name:"Poisto RH%" };
+                        var dataPointsPoistoH = [];
+
+                        var dataSeriesUlkoC = { type: "line", showInLegend: true, name:"Ulko C" };
+                        var dataPointsUlkoC = [];
+                        
+                        var dataSeriesUlkoH = { type: "line", showInLegend: true, name:"Ulko RH%" };
+                        var dataPointsUlkoH = [];
+
+                        var dataSeriesRaikasC = { type: "line", showInLegend: true, name:"Raikas C" };
+                        var dataPointsRaikasC = [];
+
+                        var dataSeriesRaikasH = { type: "line", showInLegend: true, name:"Raikas RH%", visible: false };
+                        var dataPointsRaikasH = [];
+
+                        var dataSeriesJateC = { type: "line", showInLegend: true, name:"Jate C" };
+                        var dataPointsJateC = [];
+
+                        var dataSeriesJateH = { type: "line", showInLegend: true, name:"Jate RH%", visible: false };
+                        var dataPointsJateH = [];
+
+                        var dataSeriesMoodi = { type: "line", showInLegend: true, name:"KesaTalvi", visible: false };
+                        var dataPointsMoodi = [];
+                        
+                        var dataSeriesLampo= { type: "line", showInLegend: true, name:"Lammitys", visible: false };
+                        var dataPointsLampo = [];
+
+                        var dataSeriesSpeed = { type: "line", showInLegend: true, name:"Nopeus", visible: false};
+                        var dataPointsSpeed = [];
+
+                        var dataSeriesWSpeed = { type: "line", showInLegend: true, name:"Tuuli m/s", visible: false };
+                        var dataPointsWSpeed = [];
+
+                        var dataSeriesWDir = { type: "line", showInLegend: true, name:"Tuulen s. /10", visible: false};
+                        var dataPointsWDir = [];
+
+
+                        var xax = -1 * jqdata.length;
+                        g_jqdata = jqdata; //Copy to global
+
+                        $.each( jqdata, function( key, val ) {
+                            try 
+                            {
+                                var xx = 0;
+                                row = JSON.parse(val);
+                                xx = row["timestamp"];
+                                var t = new Date(1970, 0, 1); // Epoch
+                                xx = t.setSeconds(xx + (6000));
+                                $.each(row, function( k, v ) {
+                                    console.log(k);
+                                    console.log(v);
+
+                                    if ( v !== undefined && parseFloat(v) ) 
+                                    {
+                                        fill_chart_data(k, "ilto/t/tulo",  v ,dataPointsTuloC,   xx);
+                                        fill_chart_data(k, "ilto/h/tulo",  v ,dataPointsTuloH,   xx);
+                                        fill_chart_data(k, "ilto/t/poisto",v ,dataPointsPoistoC, xx);
+                                        fill_chart_data(k, "ilto/h/poisto",v ,dataPointsPoistoH, xx);
+                                        fill_chart_data(k, "ilto/t/ulko",  v ,dataPointsUlkoC,   xx);
+                                        fill_chart_data(k, "ilto/h/ulko",  v ,dataPointsUlkoH,   xx);
+                                        fill_chart_data(k, "ilto/t/raikas",v ,dataPointsRaikasC, xx);
+                                        fill_chart_data(k, "ilto/h/raikas",v ,dataPointsRaikasH, xx);
+                                        fill_chart_data(k, "ilto/t/jate",  v ,dataPointsJateC,   xx);
+                                        fill_chart_data(k, "ilto/h/jate",  v ,dataPointsJateH,   xx);
+                                        fill_chart_data(k, "ilto/i/moodi", v ,dataPointsMoodi,   xx);
+                                        fill_chart_data(k, "ilto/i/lampo", v * 100  ,dataPointsLampo,  xx);
+                                        fill_chart_data(k, "ilto/speed",   v * 10   ,dataPointsSpeed,  xx);
+                                        fill_chart_data(k, "ilto/w/speed",     v    ,dataPointsWSpeed, xx);
+                                        fill_chart_data(k, "ilto/w/direction", v/10 ,dataPointsWDir,   xx);
+                                    }
+                                });
+                            }
+                            catch(err) {
+                                console.log(err.message);
+                            }
+                           
+                        });
+
+                        dataSeriesTuloC.dataPoints = dataPointsTuloC;
+                        chartdata.push(dataSeriesTuloC);
+                        
+                        dataSeriesTuloH.dataPoints = dataPointsTuloH;
+                        chartdata.push(dataSeriesTuloH);
+
+                        dataSeriesPoistoC.dataPoints = dataPointsPoistoC;
+                        chartdata.push(dataSeriesPoistoC);
+
+                        dataSeriesPoistoH.dataPoints = dataPointsPoistoH;
+                        chartdata.push(dataSeriesPoistoH);
+
+                        dataSeriesRaikasC.dataPoints = dataPointsRaikasC;
+                        chartdata.push(dataSeriesRaikasC);
+
+                        dataSeriesRaikasH.dataPoints = dataPointsRaikasH;
+                        chartdata.push(dataSeriesRaikasH);
+
+                        dataSeriesJateC.dataPoints = dataPointsJateC;
+                        chartdata.push(dataSeriesJateC);
+
+                        dataSeriesJateH.dataPoints = dataPointsJateH;
+                        chartdata.push(dataSeriesJateH);
+
+                        dataSeriesUlkoC.dataPoints = dataPointsUlkoC;
+                        chartdata.push(dataSeriesUlkoC);
+
+                        dataSeriesUlkoH.dataPoints = dataPointsUlkoH;
+                        chartdata.push(dataSeriesUlkoH);
+
+                        dataSeriesMoodi.dataPoints = dataPointsMoodi;
+                        chartdata.push(dataSeriesMoodi);
+                        
+                        dataSeriesLampo.dataPoints = dataPointsLampo;
+                        chartdata.push(dataSeriesLampo);
+
+                        dataSeriesSpeed.dataPoints = dataPointsSpeed;
+                        chartdata.push(dataSeriesSpeed);
+
+                        dataSeriesWSpeed.dataPoints = dataPointsWSpeed;
+                        chartdata.push(dataSeriesWSpeed);
+
+                        dataSeriesWDir.dataPoints = dataPointsWDir;
+                        chartdata.push(dataSeriesWDir);
+                        
+                        crete_chart();
+                        mychart.render();
+                    }
+                );
+        };
+
+        window.addEventListener("load", get_chart_data, false);
+        </script>
+</head>
+
+<body>
+    <div id="chartContainer" style="height: 800px; width: 1200px;"></div>
+</body>
+
+</html>

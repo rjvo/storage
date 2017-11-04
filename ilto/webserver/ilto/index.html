@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="canvasjs.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<!-- ----------------------------------------------------------------------------------------------- -->
+
+<ul class="tab">
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'yle_')">Yleiskuva</a></li>
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'ilto_')">ILTO</a></li>
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'kayra_')">Kayrat</a></li>
+  <li><a href="javascript:void(0)" style="color:darkslategray;font-size: small;" class="tablinks" onclick="openTab(event, 'debug_')">Debug</a></li>
+</ul>
+
+<div class=ilto_line><img id=ilto_online_img src="online.png" onclick="closews()" height="30"/></div>
+<div class=ilto_line><img id=ilto_offline_img src="offline.png" onclick="connectws()" height="30"/></div>
+
+<div class=ow><img id=ow_icon src="q.png" height="50"/></div>
+
+<p class=owt><span id=ilto/t/ulko>---</span> C</p>
+<p class=owh><span id=ilto/h/ulko>---</span> %RH</p>
+<p class=ows><span id=ilto/w/speed>---</span> m/s</p>
+<p class=ilto_speed><span id=ilto/speedtxt>-</span></p>
+
+<div class=compass><img id=compass_img src="compass.png" height="60"/></div>
+<div class="wind_dir"><img id=wind_dir_img src="q.png" width="40"></div>
+
+
+<!-- ----------------------------------------------------------------------------------------------- -->
+<div id="yle_" class="tabcontent">
+  <h3>Yleiskuva</h3>
+  <div class=control>
+
+  </div>
+  <div class=yleis_status>
+      <div class="compass_big"><img id=compass_big_img src="compass.png" width="140"></div>
+      <div class="wind_dir_big"><img id=wind_dir_big_img src="q.png" width="100"></div>
+      <div class="asunto"><img id=asunto_img src="asunto.png" width="500"></div>
+      <div class="yle_ow"><img id=yle_ow_icon src="q.png" height="150"/></div>
+      <div class="yle_ilto_t_ulko"><span id="yle_ilto/t/ulko"> --- </span> C</div>
+      <div class="yle_ilto_h_ulko"><span id="yle_ilto/h/ulko"> --- </span> %RH</div>
+      <div class="yle_ilto_t_tulo"><span id="yle_ilto/t/tulo"> --- </span> C /</div>
+      <div class="yle_ilto_t_raikas"><span id="yle_ilto/t/raikas"> --- </span> C</div>
+      <div class="yle_ilto_t_poisto"><span id="yle_ilto/t/poisto"> --- </span> C</div>
+      <div class="yle_ilto_h_poisto"><span id="yle_ilto/h/poisto"> --- </span> %RH</div>
+      <div class="yle_ilto_t_jate"><span id="yle_ilto/t/jate"> --- </span> C</div>
+      <div class="yle_ilto_w_speed"><span id="yle_ilto/w/speed"> --- </span> m/s</div>
+
+      <div class="yle_speed_1"><img id=yle_s1_img src="S1.png" onclick="setSpeed('S3')" height="80"/></div>
+      <div class="yle_speed_s1"><img id=yle_ss1_img src="S.png" height="90"/></div>
+      <div class="yle_speed_2"><img id=yle_s2_img src="S2.png" onclick="setSpeed('S0')" height="80"/></div>
+      <div class="yle_speed_s2"><img id=yle_ss2_img src="S.png" height="90"/></div>
+      <div class="yle_speed_3"><img id=yle_s3_img src="S4.png" onclick="setSpeed('S2')" height="80"/></div>
+      <div class="yle_speed_s3"><img id=yle_ss3_img src="S.png" height="90"/></div>
+
+      <div class="yle_ventilate">
+        <p><input type="text" id="ventilationTxt" value="5" size="5"> min</p>
+        <button onclick="boost()" style="width=100px;height:20px" >Tuuleta</button>
+        <button onclick="ventilate()" style="width=100px;height:20px" >Jaahdyta</button>
+      </div>
+
+  </div>
+</div>
+
+<!-- ----------------------------------------------------------------------------------------------- -->
+<div id="ilto_" class="tabcontent">
+  <h3>ILTO</h3>
+  <p class=ilto_raikas_t><span id=ilto_ilto/t/raikas>---</span> C</p>
+  <p class=ilto_raikas_h><span id=ilto_ilto/h/raikas>---</span> %RH</p>
+  <p class=ilto_tulo_t><span id=ilto_ilto/t/tulo>---</span> C</p>
+  <p class=ilto_tulo_h><span id=ilto_ilto/h/tulo>---</span> %RH</p>
+  <p class=ilto_poisto_t><span id=ilto_ilto/t/poisto>---</span> C</p>
+  <p class=ilto_poisto_h><span id=ilto_ilto/h/poisto>---</span> %RH</p>
+  <p class=ilto_jate_t><span id=ilto_ilto/t/jate>---</span> C</p>
+  <p class=ilto_jate_h><span id=ilto_ilto/h/jate>---</span> %RH</p>
+  <p class=ilto_ulko>Pirkkala</p>
+  <p class=ilto_ulko_t><span id=ilto_ilto/t/ulko>---</span> C</p>
+  <p class=ilto_ulko_h><span id=ilto_ilto/h/ulko>---</span> %RH</p>
+  <p class=ilto_kesa_talvi><span id=ilto_ilto/i/moodi>-</span></p>  
+  <div id="ILTO_IMG"><img src="ilto.png" height="400"  onclick="sendMessage('GG')"></img></div>
+  <span class="ilto_tila"><img id=ilto_tila_img src="tila_0.png" height="15"/></span>
+  <div class="ilto_talteen"><img id=ilto_talteen_img src="q.png" onclick="sendMessage('TT')" height="50"/></div>
+  <div class="ilto_lammitys"><img id=ilto_lammitys_img src="q.png" onclick="sendMessage('LL')" height="50"/></div>
+
+
+  <div class="ilto_speed_1"><img id=ilto_s1_img src="S1.png" onclick="setSpeed('S3')" height="80"/></div>
+  <div class="ilto_speed_s1"><img id=ilto_ss1_img src="S.png" height="90"/></div>
+  <div class="ilto_speed_2"><img id=ilto_s2_img src="S2.png" onclick="setSpeed('S0')" height="80"/></div>
+  <div class="ilto_speed_s2"><img id=ilto_ss2_img src="S.png" height="90"/></div>
+  <div class="ilto_speed_3"><img id=ilto_s3_img src="S4.png" onclick="setSpeed('S2')" height="80"/></div>
+  <div class="ilto_speed_s3"><img id=ilto_ss3_img src="S.png" height="90"/></div>
+
+</div>
+
+<!-- ----------------------------------------------------------------------------------------------- -->
+<div id="kayra_" class="tabcontent">
+  <h3>Kayrat</h3>
+  <div id="chartContainer" style="height: 800px; width: 100%;"></div>
+</div>
+
+<!-- ----------------------------------------------------------------------------------------------- -->
+<div id="debug_" class="tabcontent">
+  <h3>Debug</h3>
+  <p>Poisto <span id="debug_ilto/t/poisto"> --- </span> C
+  <span id="debug_ilto/h/poisto"> --- </span> RH%</p>
+
+  <p>Tulo   <span id="debug_ilto/t/tulo"> --- </span>
+  <span id="debug_ilto/h/tulo"> --- </span></p>
+  
+  <p>Jate   <span id="debug_ilto/t/jate"> --- </span> C 
+  <span id="debug_ilto/h/jate"> --- </span> %RH </p>
+
+  <p>Raikas <span id="debug_ilto/t/raikas"> --- </span> C 
+  <span id="debug_ilto/h/raikas"> --- </span> %RH </p>
+
+  <p>Ulko   <span id="debug_ilto/t/ulko"> --- </span> C
+  <span id="debug_ilto/h/ulko"> --- </span> %RH</p>
+  
+  <p>Lammitys <span id="debug_ilto/i/lampo">---</span></p>
+  <p>KesaTalvi <span id="debug_ilto/i/moodi"> --- </span></p>
+  <p>Ping <span id="debug_ilto/i/ping"> --- </span></p>
+  <p>Trace <span id="debug_ilto/trace"> --- </span> </p>
+  
+  <p> Wind <span id="debug_ilto/w/speed"> --- </span> m/s</p>
+  <p> Dir <span id="debug_ilto/w/direction"> --- </span> deg</p>
+  <p> weath <span id="debug_ilto/w/details"> --- </span></p>
+
+  <p>RAW Data<span id="debug_ilto/data"> --- </span></p>
+  <form action = "">
+  <p> <button type = "button" onclick = "sendMessage('PP')"> PING </button></p>
+  <p> <button type = "button" onclick = "sendMessage('GG')"> Update </button></p>
+  <p> <button type = "button" onclick = "sendMessage('L0')"> Lammitys OFF </button></p>
+  <p> <button type = "button" onclick = "sendMessage('L1')"> Lammitys ON </button></p>
+  <p> <button type = "button" onclick = "sendMessage('T0')"> Kesa </button></p>
+  <p> <button type = "button" onclick = "sendMessage('T9')"> Talvi </button></p>
+  </form>
+</div>
+
+<!-- ----------------------------------------------------------------------------------------------- -->
+<!-- ----------------------------------------------------------------------------------------------- -->
+<script>
+
+var prefix = "";
+var wsstate = false;
+var kesatalvi = 'T0';
+var lammitys = 'L0';
+var owdaynight = 'd';
+
+function openTab(evt, tabName) {
+    prefix = tabName;
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+
+    if (tabName === 'kayra_')
+    {
+        get_chart_data();
+    }
+    sendMessage('GG');
+}
+
+var wsUri = "wss://rmot.xyz:1880/ilto/data";
+var output;
+
+function init()
+{
+    document.getElementById("ilto_online_img").style.visibility='hidden';
+
+    document.getElementById("ilto_ss1_img").style.visibility='hidden';
+    document.getElementById("ilto_ss2_img").style.visibility='hidden';
+    document.getElementById("ilto_ss3_img").style.visibility='hidden';
+    openTab(event, 'yle_');
+    testWebSocket();
+}
+
+  function testWebSocket()
+  {
+    websocket = new WebSocket(wsUri);
+    websocket.onopen = function(evt) { onOpen(evt) };
+    websocket.onclose = function(evt) { onClose(evt) };
+    websocket.onmessage = function(evt) { onMessage(evt) };
+    websocket.onerror = function(evt) { onError(evt) };
+  }
+
+function closews()
+{
+    websocket.close();
+}
+
+function connectws()
+{
+    websocket.connect();
+}
+
+  function onOpen(evt)
+  {
+    wsstate = true;
+    document.getElementById("ilto_online_img").style.visibility='visible';
+    document.getElementById("ilto_offline_img").style.visibility='hidden';
+    sendMessage('GG');
+  }
+
+  function onClose(evt)
+  {
+    document.getElementById("ilto_online_img").style.visibility='hidden';
+    document.getElementById("ilto_offline_img").style.visibility='visible';
+    setTimeout(function() {
+      connect();
+    }, 5000);
+  }
+
+  function onMessage(evt)
+  {
+    var data = JSON.parse(evt.data);
+    console.log(data.topic);
+    if (data.topic == "ilto")
+    {
+        if(document.getElementById("ilto_tila_img").src.includes("tila_0.png"))
+        {
+            document.getElementById("ilto_tila_img").src = "tila_1.png";
+        }
+        else
+        {
+            document.getElementById("ilto_tila_img").src = "tila_0.png";
+        }
+    }
+    else if (data.topic === 'ilto/i/moodi')
+    {
+        if(data.payload === "9.0")
+        {
+            document.getElementById("ilto_talteen_img").src = "talvi.jpg";
+            kesatalvi = "T0";
+        }
+        else
+        {
+            document.getElementById("ilto_talteen_img").src = "kesa.jpg";
+            kesatalvi = "T9";
+        }
+    }
+    else if (data.topic === 'ilto/i/lampo')
+    {
+        if(data.payload === "1.0")
+        {
+            document.getElementById("ilto_lammitys_img").src = "lammitys_1.png";
+            lammitys = "L0";
+        }
+        else
+        {
+            document.getElementById("ilto_lammitys_img").src = "lammitys_0.png";
+            lammitys = "L1";
+        }
+    }
+    else if (data.topic === 'ilto/w/details')
+    {
+        var owimg = getOweatherIcon(data.payload);
+        document.getElementById("ow_icon").src = owimg;
+        document.getElementById("yle_ow_icon").src = owimg;
+    }
+    else if (data.topic === 'ilto/w/direction')
+    {
+        var dirimg = "q.png";
+        var dir = Math.round(data.payload / 5) * 5;
+        if (dir !== undefined)
+        {
+            dirimg = "direction/" + "arrow_" + dir + ".png";
+        }
+        document.getElementById("wind_dir_img").src = dirimg;
+        document.getElementById("wind_dir_big_img").src = dirimg;
+    }
+    else if (data.topic === 'ilto/w/sunset')
+    {
+        var epocnow = (new Date).getTime();
+        if (data.payload < epocnow)
+        {
+            owdaynight = 'n';
+        }
+        else
+        {
+            owdaynight = 'd';
+        }
+    }
+    else if (data.topic === 'ilto/speedtxt')
+    {
+        var speed = data.payload;
+        if (speed === "1")
+        {
+            document.getElementById("yle_ss1_img").style.visibility='visible';
+            document.getElementById("yle_ss2_img").style.visibility='hidden';
+            document.getElementById("yle_ss3_img").style.visibility='hidden';
+            document.getElementById("ilto_ss1_img").style.visibility='visible';
+            document.getElementById("ilto_ss2_img").style.visibility='hidden';
+            document.getElementById("ilto_ss3_img").style.visibility='hidden';
+        }
+        else if (speed === "2/M")
+        {
+            document.getElementById("yle_ss1_img").style.visibility='hidden';
+            document.getElementById("yle_ss2_img").style.visibility='visible';
+            document.getElementById("yle_ss3_img").style.visibility='hidden';
+            document.getElementById("ilto_ss1_img").style.visibility='hidden';
+            document.getElementById("ilto_ss2_img").style.visibility='visible';
+            document.getElementById("ilto_ss3_img").style.visibility='hidden';
+        }
+        else if (speed === "4")
+        {
+            document.getElementById("yle_ss1_img").style.visibility='hidden';
+            document.getElementById("yle_ss2_img").style.visibility='hidden';
+            document.getElementById("yle_ss3_img").style.visibility='visible';
+            document.getElementById("ilto_ss1_img").style.visibility='hidden';
+            document.getElementById("ilto_ss2_img").style.visibility='hidden';
+            document.getElementById("ilto_ss3_img").style.visibility='visible';
+        }
+    }
+    else if (data.topic === "ilto/ventilation" )
+    {
+        // round to one decimal
+        var value = Math.round(parseFloat(data.payload) / 60 * 10) / 10;
+        var msg = "J - " + value.toString();
+        if (value === 0)
+        {
+            msg = "5";
+        }
+        document.getElementById("ventilationTxt").value = msg
+    }    
+    else if (data.topic === "ilto/boost")
+    {
+        // round to one decimal
+        var value = parseFloat(data.payload);
+        value = Math.round( value / 60 * 10);
+        value = value / 10;
+        var msg = "T - " + value.toString();
+        if (value === 0)
+        {
+            msg = "5";
+        }
+        document.getElementById("ventilationTxt").value = msg
+    }
+    if (data.topic !== undefined)
+    {
+        var outputelement = document.getElementById(prefix + data.topic);
+        if (outputelement !== null)
+        {
+            var inputdata = data.payload;
+            outputelement.innerHTML = inputdata;
+        }
+        var outputelement = document.getElementById(data.topic);
+        if (outputelement !== null)
+        {
+            var inputdata = data.payload;
+            outputelement.innerHTML = inputdata;
+        }
+    }
+  }
+
+  function onError(evt)
+  {
+      writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+  }
+
+  function doSend(message)
+  {
+      writeToScreen("SENT: " + message);
+   // websocket.send(message);
+  }
+
+  function writeToScreen(message)
+  {
+      var pre = document.createElement("p");
+      pre.style.wordWrap = "break-word";
+      pre.innerHTML = message;
+      output.appendChild(pre);
+  }
+
+  function sleep(miliseconds) {
+      var currentTime = new Date().getTime();
+      while (currentTime + miliseconds >= new Date().getTime()) {
+      }
+  }
+
+  function sendMessage(msg)
+  {
+    if(wsstate === true)
+    {
+      if (msg === "TT")
+      {
+        websocket.send(kesatalvi);
+      }
+      else if (msg === "LL")
+      {
+        websocket.send(lammitys);
+      }
+      else
+      {
+        websocket.send(msg);
+      }
+      if (msg !== "GG")
+      {
+        sleep(500);
+        websocket.send("GG");
+      }
+    }
+  } // end sendMessage
+
+  function setSpeed(msg)
+  {
+    if(wsstate === true)
+    {
+        websocket.send(msg);
+    }
+  }
+
+  function boost()
+  {
+    var msg = document.getElementById("ventilationTxt").value;
+    var duration = parseFloat(msg);
+    if(wsstate === true && duration !== undefined)
+    {
+        duration = parseInt(duration * 60);
+        websocket.send("B" + duration.toString());
+    }
+  }
+
+  function ventilate()
+  {
+    var msg = document.getElementById("ventilationTxt").value;
+    var duration = parseFloat(msg);
+    if(wsstate === true && duration !== undefined)
+    {
+        duration = parseInt(duration * 60);
+        websocket.send("V" + duration.toString());
+    }
+  }
+ 
+  function getdata()
+  {
+      var today = new Date();
+      var utcm = today.getUTCMilliseconds();
+      var l = Math.floor((new Date).getTime()/1000) + utcm + 10;
+      var a = Math.floor((new Date).getTime()/1000) - 60*24 + utcm;
+      $.post( "haedataa.php", { alku: a, loppu: l, limitti: "2000" })
+        .done(function( data ) {
+            alert( "Data Loaded: " + data );
+  });
+  }
+
+  window.addEventListener("load", init, false);
+
+var openweathericons = {};
+
+  function getOweatherIcon(name)
+  {
+      openweathericons['clear sky'] = '01' + owdaynight + '.png';
+      openweathericons['few clouds'] = '02' + owdaynight + '.png';
+      openweathericons['scattered clouds'] = '03' + owdaynight + '.png';
+      openweathericons['broken clouds'] = '04' + owdaynight + '.png';
+      openweathericons['shower rain'] = '05' + owdaynight + '.png';
+      openweathericons['rain'] = '06' + owdaynight + '.png';
+      openweathericons['thunderstorm'] = '07' + owdaynight + '.png';
+      openweathericons['snow'] = '08' + owdaynight + '.png';
+      openweathericons['mist'] = '09' + owdaynight + '.png';
+      openweathericons['thunderstorm with light rain'] = '11d.png';
+      openweathericons['thunderstorm with rain'] = '11d.png';
+      openweathericons['thunderstorm with heavy rain'] = '11d.png';
+      openweathericons['light thunderstorm'] = '11d.png';
+      openweathericons['thunderstorm'] = '11d.png';
+      openweathericons['heavy thunderstorm'] = '11d.png';
+      openweathericons['ragged thunderstorm'] = '11d.png';
+      openweathericons['thunderstorm with light drizzle'] = '09d.png';
+      openweathericons['thunderstorm with drizzle'] = '09d.png';
+      openweathericons['thunderstorm with heavy drizzle'] = '09d.png';
+      openweathericons['light intensity drizzle'] = '09d.png';
+      openweathericons['drizzle'] = '09d.png';
+      openweathericons['heavy intensity drizzle'] = '09d.png';
+      openweathericons['light intensity drizzle rain'] = '09d.png';
+      openweathericons['drizzle rain'] = '09d.png';
+      openweathericons['heavy intensity drizzle rain'] = '09d.png';
+      openweathericons['shower rain and drizzle'] = '09d.png';
+      openweathericons['heavy shower rain and drizzle'] = '09d.png';
+      openweathericons['shower drizzle'] = '09d.png';
+      openweathericons['light rain'] = '10d.png';
+      openweathericons['moderate rain'] = '10d.png';
+      openweathericons['heavy intensity rain'] = '10d.png';
+      openweathericons['very heavy rain'] = '10d.png';
+      openweathericons['extreme rain'] = '10d.png';
+      openweathericons['freezing rain'] = '13d.png';
+      openweathericons['light intensity shower rain'] = '10d.png';
+      openweathericons['shower rain'] = '10d.png';
+      openweathericons['heavy intensity shower rain'] = '10d.png';
+      openweathericons['ragged shower rain'] = '10d.png';
+      openweathericons['light snow'] = '13d.png';
+      openweathericons['snow'] = '13d.png';
+      openweathericons['heavy snow'] = '13d.png';
+      openweathericons['sleet'] = '13d.png';
+      openweathericons['shower sleet'] = '13d.png';
+      openweathericons['light rain and snow'] = '13d.png';
+      openweathericons['rain and snow'] = '13d.png';
+      openweathericons['light shower snow'] = '13d.png';
+      openweathericons['heavy shower snow'] = '13d.png';
+      openweathericons['mist'] = '50d.png';
+      openweathericons['smoke'] = '50d.png';
+      openweathericons['haze'] = '50d.png';
+      openweathericons['sand, dust whirls'] = '50d.png';
+      openweathericons['fog'] = '50d.png';
+      openweathericons['sand'] = '50d.png';
+      openweathericons['dust'] = '50d.png';
+      openweathericons['volcanic ash'] = '50d.png';
+      openweathericons['squalls'] = '50d.png';
+      openweathericons['tornado'] = '50d.png';
+      openweathericons['few clouds'] = '02' + owdaynight + '.png';
+      openweathericons['scattered clouds'] = '03' + owdaynight + '.png';
+      openweathericons['broken clouds'] = '03' + owdaynight + '.png';
+      openweathericons['overcast clouds'] = '04' + owdaynight + '.png';
+
+      if (name !== undefined)
+      {
+        return 'https://openweathermap.org/img/w/' + openweathericons[name];
+      }
+      return "q.png";      
+  }
+
+</script>
+
+<!-- ----------------------------------------------------------------------------------------------- -->
+
+ <script type="text/javascript">
+
+        var chartdata = [];
+        var chartdatatemp= [];
+        var mychart = NaN;
+        var xax = 0;
+        var xtemp = 0;
+        var g_jqdata = [];
+        
+        function crete_chart() {
+                    mychart = new CanvasJS.Chart("chartContainer",
+                    {
+                        zoomEnabled: true,
+                        zoomType: "xy",
+                        panEnabled: true,
+                		exportFileName: "ILTO Live",
+                		exportEnabled: true,
+                   		title: {
+				            text: "ILTO"
+            			},
+                        toolTip:{             
+                            content: "{name}: {y} ({x})"
+                        },
+	                  legend: {
+	                      fontSize:14,
+	                      fontFamily: "tamoha",
+	                      fontColor: "Sienna",
+	                      horizontalAlign: "right",
+	                      verticalAlign: "center",
+						            cursor: "pointer",
+						            itemclick: function (e) {
+						                //console.log("legend click: " + e.dataPointIndex);
+						                //console.log(e);
+						                if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+						                    e.dataSeries.visible = false;
+						                } else {
+						                    e.dataSeries.visible = true;
+						                }
+						
+						                e.chart.render();
+						            }
+						        },
+            			axisX:{      
+            				//valueFormatString: "DD-MMM" ,
+            				//interval: 10,
+            				//intervalType: "day",
+                            labelFormatter: function (e) {
+                                return CanvasJS.formatDate( e.value, "YYYY_MMM-DD-HH:mm:ss"); // http://canvasjs.com/docs/charts/chart-options/axisx/valueformatstring/
+                            },
+                            labelAngle: -45,
+                            fontSize: 10,
+                            fontFamily: "tamoha",
+                            fontColor: "Sienna",
+            				labelFontColor: "rgb(0,75,141)",
+            			},
+            			axisY: {
+            				title: "C / RH%",
+            				interlacedColor: "azure",
+            				tickColor: "azure",
+            				titleFontColor: "rgb(0,75,141)",
+            				maximum : 100,
+            				interval: 10,
+                            fontSize: 10,
+                            includeZero: false
+                        },
+                        data: chartdata,  // random generator below
+                    });
+                    mychart.options.axisY.maximum = 100;
+                }
+
+        function fill_chart_data(k, target, v, outdata, xax)
+        {
+            if(k === target)
+            {
+                outdata.push({
+                    x: xax,
+                    y: v,
+                });
+            }
+        }
+
+        function get_chart_data()
+        {
+            while (chartdata.length > 0) 
+            {
+                chartdata.pop();
+            }
+            
+            var today = new Date();
+            var utcm = today.getUTCMilliseconds();
+            var l = (Math.floor((new Date).getTime()/1000) + utcm + 10) * 2;
+            var a = 0; //Math.floor((new Date).getTime()/1000) - 60*24 + utcm;
+
+            $.post( "haedataa.php", { alku: a, loppu: l, limitti: "2000" })
+                .done( function( jqdata ) 
+                    {
+                        var items = [];
+
+                        var dataSeriesTuloC = { type: "line", showInLegend: true, name:"Tulo C" };
+                        var dataPointsTuloC = [];
+                        
+                        var dataSeriesTuloH = { type: "line", showInLegend: true, name:"Tulo RH%" };
+                        var dataPointsTuloH = [];
+
+                        var dataSeriesPoistoC = { type: "line", showInLegend: true, name:"Poisto C" };
+                        var dataPointsPoistoC = [];
+
+                        var dataSeriesPoistoH = { type: "line", showInLegend: true, name:"Poisto RH%" };
+                        var dataPointsPoistoH = [];
+
+                        var dataSeriesUlkoC = { type: "line", showInLegend: true, name:"Ulko C" };
+                        var dataPointsUlkoC = [];
+                        
+                        var dataSeriesUlkoH = { type: "line", showInLegend: true, name:"Ulko RH%" };
+                        var dataPointsUlkoH = [];
+
+                        var dataSeriesRaikasC = { type: "line", showInLegend: true, name:"Raikas C" };
+                        var dataPointsRaikasC = [];
+
+                        var dataSeriesRaikasH = { type: "line", showInLegend: true, name:"Raikas RH%", visible: false };
+                        var dataPointsRaikasH = [];
+
+                        var dataSeriesJateC = { type: "line", showInLegend: true, name:"Jate C" };
+                        var dataPointsJateC = [];
+
+                        var dataSeriesJateH = { type: "line", showInLegend: true, name:"Jate RH%", visible: false };
+                        var dataPointsJateH = [];
+
+                        var dataSeriesMoodi = { type: "line", showInLegend: true, name:"KesaTalvi", visible: false };
+                        var dataPointsMoodi = [];
+                        
+                        var dataSeriesLampo= { type: "line", showInLegend: true, name:"Lammitys", visible: false };
+                        var dataPointsLampo = [];
+
+                        var dataSeriesSpeed = { type: "line", showInLegend: true, name:"Nopeus", visible: false};
+                        var dataPointsSpeed = [];
+
+                        var dataSeriesWSpeed = { type: "line", showInLegend: true, name:"Tuuli m/s", visible: false };
+                        var dataPointsWSpeed = [];
+
+                        var dataSeriesWDir = { type: "line", showInLegend: true, name:"Tuulen s. /10", visible: false};
+                        var dataPointsWDir = [];
+
+
+                        var xax = -1 * jqdata.length;
+                        g_jqdata = jqdata; //Copy to global
+
+                        $.each( jqdata, function( key, val ) {
+                            try 
+                            {
+                                var xx = 0;
+                                row = JSON.parse(val);
+                                xx = row["timestamp"];
+                                var t = new Date(1970, 0, 1); // Epoch
+                                xx = t.setSeconds(xx + (6000));
+                                $.each(row, function( k, v ) {
+                                    console.log(k);
+                                    console.log(v);
+
+                                    if ( v !== undefined && parseFloat(v) ) 
+                                    {
+                                        fill_chart_data(k, "ilto/t/tulo",  v ,dataPointsTuloC,   xx);
+                                        fill_chart_data(k, "ilto/h/tulo",  v ,dataPointsTuloH,   xx);
+                                        fill_chart_data(k, "ilto/t/poisto",v ,dataPointsPoistoC, xx);
+                                        fill_chart_data(k, "ilto/h/poisto",v ,dataPointsPoistoH, xx);
+                                        fill_chart_data(k, "ilto/t/ulko",  v ,dataPointsUlkoC,   xx);
+                                        fill_chart_data(k, "ilto/h/ulko",  v ,dataPointsUlkoH,   xx);
+                                        fill_chart_data(k, "ilto/t/raikas",v ,dataPointsRaikasC, xx);
+                                        fill_chart_data(k, "ilto/h/raikas",v ,dataPointsRaikasH, xx);
+                                        fill_chart_data(k, "ilto/t/jate",  v ,dataPointsJateC,   xx);
+                                        fill_chart_data(k, "ilto/h/jate",  v ,dataPointsJateH,   xx);
+                                        fill_chart_data(k, "ilto/i/moodi", v ,dataPointsMoodi,   xx);
+                                        fill_chart_data(k, "ilto/i/lampo", v * 100  ,dataPointsLampo,  xx);
+                                        fill_chart_data(k, "ilto/speed",   v * 10   ,dataPointsSpeed,  xx);
+                                        fill_chart_data(k, "ilto/w/speed",     v    ,dataPointsWSpeed, xx);
+                                        fill_chart_data(k, "ilto/w/direction", v/10 ,dataPointsWDir,   xx);
+                                    }
+                                });
+                            }
+                            catch(err) {
+                                console.log(err.message);
+                            }
+                           
+                        });
+
+                        dataSeriesTuloC.dataPoints = dataPointsTuloC;
+                        chartdata.push(dataSeriesTuloC);
+                        
+                        dataSeriesTuloH.dataPoints = dataPointsTuloH;
+                        chartdata.push(dataSeriesTuloH);
+
+                        dataSeriesPoistoC.dataPoints = dataPointsPoistoC;
+                        chartdata.push(dataSeriesPoistoC);
+
+                        dataSeriesPoistoH.dataPoints = dataPointsPoistoH;
+                        chartdata.push(dataSeriesPoistoH);
+
+                        dataSeriesRaikasC.dataPoints = dataPointsRaikasC;
+                        chartdata.push(dataSeriesRaikasC);
+
+                        dataSeriesRaikasH.dataPoints = dataPointsRaikasH;
+                        chartdata.push(dataSeriesRaikasH);
+
+                        dataSeriesJateC.dataPoints = dataPointsJateC;
+                        chartdata.push(dataSeriesJateC);
+
+                        dataSeriesJateH.dataPoints = dataPointsJateH;
+                        chartdata.push(dataSeriesJateH);
+
+                        dataSeriesUlkoC.dataPoints = dataPointsUlkoC;
+                        chartdata.push(dataSeriesUlkoC);
+
+                        dataSeriesUlkoH.dataPoints = dataPointsUlkoH;
+                        chartdata.push(dataSeriesUlkoH);
+
+                        dataSeriesMoodi.dataPoints = dataPointsMoodi;
+                        chartdata.push(dataSeriesMoodi);
+                        
+                        dataSeriesLampo.dataPoints = dataPointsLampo;
+                        chartdata.push(dataSeriesLampo);
+
+                        dataSeriesSpeed.dataPoints = dataPointsSpeed;
+                        chartdata.push(dataSeriesSpeed);
+
+                        dataSeriesWSpeed.dataPoints = dataPointsWSpeed;
+                        chartdata.push(dataSeriesWSpeed);
+
+                        dataSeriesWDir.dataPoints = dataPointsWDir;
+                        chartdata.push(dataSeriesWDir);
+                        
+                        crete_chart();
+                        mychart.render();
+                    }
+                );
+        };
+
+        // window.addEventListener("load", get_chart_data, false);
+        </script>
+
+</body>
+</html>
